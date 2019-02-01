@@ -16,3 +16,13 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::namespace('API')->group(function  () {
+    Route::get('/customers', 'CustomerController@index');
+
+    Route::get('/customer-products/{customer_id}', 'CustomerProductController@get_products_by_customer_id');
+    
+    Route::get('/products', 'ProductController@index');
+
+    Route::get('/orders', 'OrderController@index');
+});
