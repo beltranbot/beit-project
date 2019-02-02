@@ -28,4 +28,5 @@ Route::namespace('API')->group(function  () {
     Route::get('/products', 'ProductController@index');
 
     Route::get('/orders', 'OrderController@index');
+    Route::post('/orders', 'OrderController@store');
 });
