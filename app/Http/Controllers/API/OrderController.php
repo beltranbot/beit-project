@@ -14,18 +14,28 @@ class OrderController extends Controller
 {
     public function index(OrderGetIndexRequest $request)
     {
-        $orders = Order::with('order_details.product');
+        $orders = Order::with('order_details.product')
+            ->with('customer');
 
         if ($request->has('customer_id') ) {
             $customer_id = $request->customer_id;
             $orders = $orders->where('customer_id', $customer_id);
         }
 
-        if ($request->has('date_start') && $request->has('date_end')) {
+        if ($request->has('date_start')) {
             $date_start = $request->date_start;
-            $date_end = $request->date_end;
-            $orders = $orders->whereBetween('creation_date', [$date_start, $date_end]);
+            $orders = $orders->where('creation_date', '>=', $date_start);
         }
+        if ($request->has('date_end')) {
+            $date_end = $request->date_end;
+            $orders = $orders->where('creation_date', '<=', $date_end);
+        }
+
+        // if ($request->has('date_start') && $request->has('date_end')) {
+        //     $date_start = $request->date_start;
+        //     $date_end = $request->date_end;
+        //     $orders = $orders->whereBetween('creation_date', [$date_start, $date_end]);
+        // }
 
         $orders = $orders->get();
 
