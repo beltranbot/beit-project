@@ -20,7 +20,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::namespace('API')->group(function  () {
     Route::get('/customers', 'CustomerController@index');
 
-    Route::get('/customer-products/{customer_id}', 'CustomerProductController@get_products_by_customer_id');
+    Route::get(
+        '/customer-products/{customer_id}',
+        'CustomerProductController@get_products_by_customer_id'
+    )->where('customer_id', '[0-9]+');
     
     Route::get('/products', 'ProductController@index');
 
