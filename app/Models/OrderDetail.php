@@ -9,6 +9,7 @@ class OrderDetail extends Model
     protected $table = 'order_detail';
     protected $primaryKey = 'order_detail_id';
     protected $guard = ['order_detail_id'];
+    public $timestamps = false;
 
     public function order()
     {

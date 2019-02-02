@@ -9,9 +9,10 @@ class Customer extends Model
     protected $table = 'customer';
     protected $primaryKey = 'customer_id';
     protected $guard = ['customer_id'];
+    public $timestamps = false;
 
-    public function customer_products()
+    public function products()
     {
-        return $this->hasMany('App\Models\CustomerProduct', 'customer_id');
+        return $this->belongsToMany('App\Models\Product', 'customer_product', 'customer_id', 'product_id');
     }
 }

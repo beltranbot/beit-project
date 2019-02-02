@@ -9,4 +9,5 @@ class Product extends Model
     protected $table = 'product';
     protected $primaryKey = 'product_id';
     protected $guard = ['product_id'];
+    public $timestamps = false;
 }

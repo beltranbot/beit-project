@@ -11,6 +11,7 @@ class CustomerProduct extends Model
         'customer_id',
         'product_id'
     ];
+    public $timestamps = false;
 
     function customer()
     {
