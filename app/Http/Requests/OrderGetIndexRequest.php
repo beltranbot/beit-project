@@ -25,16 +25,16 @@ class OrderGetIndexRequest extends FormRequest
     {
         return [
             'customer_id' => [
-                'required',
+                'sometimes',
                 'integer',
                 'exists:customer,customer_id',
             ],
             'date_start' => [
-                'required',
+                'sometimes',
                 'date',
             ],
             'date_end' => [
-                'required',
+                'sometimes',
                 'date',
                 'after_or_equal:date_start',
             ]

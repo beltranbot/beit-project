@@ -18,7 +18,7 @@ class ProductControllerTest extends TestCase
     {
         $customer = $this->create('Customer');
 
-        $this->assertDatabaseHas('customer',[
+        $this->assertDatabaseHas('customer', [
             'customer_id' => $customer['customer_id'],
             'name' => $customer['name'],
             'email' => $customer['email'],
@@ -32,7 +32,7 @@ class ProductControllerTest extends TestCase
     {
         $product = $this->create('Product');
 
-        $this->assertDatabaseHas('product',[
+        $this->assertDatabaseHas('product', [
             'product_id' => $product['product_id'],
             'name' => $product['name'],
             'product_description' => $product['product_description'],
@@ -60,17 +60,17 @@ class ProductControllerTest extends TestCase
 
         foreach ($customer->products as $product) {
             if ($i++ === 0) {
-                $this->assertDatabaseHas('customer_product',[
+                $this->assertDatabaseHas('customer_product', [
                     'customer_id' => $customer->customer_id,
                     'product_id' => $product1['product_id'],
                 ]);
-            } else if ($i++ === 1){
-                $this->assertDatabaseHas('customer_product',[
+            } else if ($i++ === 1) {
+                $this->assertDatabaseHas('customer_product', [
                     'customer_id' => $customer->customer_id,
                     'product_id' => $product2['product_id'],
                 ]);
             } else if ($i++ === 2) {
-                $this->assertDatabaseHas('customer_product',[
+                $this->assertDatabaseHas('customer_product', [
                     'customer_id' => $customer->customer_id,
                     'product_id' => $product3['product_id'],
                 ]);
@@ -116,7 +116,7 @@ class ProductControllerTest extends TestCase
                     'product_id' => $product1['product_id']
                 ]
             ],
-        ]);        
+        ]);
         $response->assertStatus(422)
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
@@ -140,7 +140,7 @@ class ProductControllerTest extends TestCase
             ],
         ]);
 
-        
+
         $response->assertStatus(422)
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
@@ -164,7 +164,7 @@ class ProductControllerTest extends TestCase
             ],
         ]);
 
-        
+
         $response->assertStatus(422)
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
@@ -188,7 +188,7 @@ class ProductControllerTest extends TestCase
             ],
         ]);
 
-        
+
         $response->assertStatus(422)
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
@@ -210,7 +210,7 @@ class ProductControllerTest extends TestCase
             ],
         ]);
 
-        
+
         $response->assertStatus(422)
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
@@ -231,7 +231,7 @@ class ProductControllerTest extends TestCase
             ],
         ]);
 
-        
+
         $response->assertStatus(422)
             ->assertExactJson([
                 'message' => 'The given data was invalid.',
@@ -241,154 +241,154 @@ class ProductControllerTest extends TestCase
             ]);
         
     // without orders details
-    $response = $this->json('POST', '/api/orders', [
-        'customer_id' => $customer1['customer_id'],
-        'creation_date' => date("Y-m-d"),
-        'delivery_address' => $faker->address
-    ]);
-
-    
-    $response->assertStatus(422)
-        ->assertExactJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'order_details' => ['The order details field is required.']
-            ]
+        $response = $this->json('POST', '/api/orders', [
+            'customer_id' => $customer1['customer_id'],
+            'creation_date' => date("Y-m-d"),
+            'delivery_address' => $faker->address
         ]);
+
+
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'order_details' => ['The order details field is required.']
+                ]
+            ]);
 
     // with orders details not array
-    $response = $this->json('POST', '/api/orders', [
-        'customer_id' => $customer1['customer_id'],
-        'creation_date' => date("Y-m-d"),
-        'delivery_address' => $faker->address,
-        'order_details' => 3,
-    ]);
-
-    
-    $response->assertStatus(422)
-        ->assertExactJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'order_details' => ['The order details must be an array.']
-            ]
+        $response = $this->json('POST', '/api/orders', [
+            'customer_id' => $customer1['customer_id'],
+            'creation_date' => date("Y-m-d"),
+            'delivery_address' => $faker->address,
+            'order_details' => 3,
         ]);
+
+
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'order_details' => ['The order details must be an array.']
+                ]
+            ]);
     
     // orders details item has not quantity
-    $response = $this->json('POST', '/api/orders', [
-        'customer_id' => $customer1['customer_id'],
-        'creation_date' => date("Y-m-d"),
-        'delivery_address' => $faker->address,
-        'order_details' => [
-            [
-                1,
-                'product_id' => $product1['product_id'],
-            ]
-        ],
-    ]);
-
-    
-    $response->assertStatus(422)
-        ->assertExactJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'order_details.0.quantity' => ['The order_details.0.quantity field is required.']
-            ]
+        $response = $this->json('POST', '/api/orders', [
+            'customer_id' => $customer1['customer_id'],
+            'creation_date' => date("Y-m-d"),
+            'delivery_address' => $faker->address,
+            'order_details' => [
+                [
+                    1,
+                    'product_id' => $product1['product_id'],
+                ]
+            ],
         ]);
+
+
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'order_details.0.quantity' => ['The order_details.0.quantity field is required.']
+                ]
+            ]);
     
     // orders details item has not product_id
-    $response = $this->json('POST', '/api/orders', [
-        'customer_id' => $customer1['customer_id'],
-        'creation_date' => date("Y-m-d"),
-        'delivery_address' => $faker->address,
-        'order_details' => [
-            [
-                'quantity' => random_int(1, 100)
-            ]
-        ],
-    ]);
-
-    
-    $response->assertStatus(422)
-        ->assertExactJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'order_details.0.product_id' => ['The order_details.0.product_id field is required.']
-            ]
+        $response = $this->json('POST', '/api/orders', [
+            'customer_id' => $customer1['customer_id'],
+            'creation_date' => date("Y-m-d"),
+            'delivery_address' => $faker->address,
+            'order_details' => [
+                [
+                    'quantity' => random_int(1, 100)
+                ]
+            ],
         ]);
+
+
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'order_details.0.product_id' => ['The order_details.0.product_id field is required.']
+                ]
+            ]);
     
     // order details has a product_id not valid for the customer
-    $response = $this->json('POST', '/api/orders', [
-        'customer_id' => $customer1['customer_id'],
-        'creation_date' => date("Y-m-d"),
-        'delivery_address' => $faker->address,
-        'order_details' => [
-            [
-                'quantity' => random_int(1, 100),
-                'product_id' => $product6['product_id'],
-            ]
-        ],
-    ]);
-
-    
-    $response->assertStatus(422)
-        ->assertExactJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'order_details.0.product_id' => ['The selected order_details.0.product_id is invalid.']
-            ]
+        $response = $this->json('POST', '/api/orders', [
+            'customer_id' => $customer1['customer_id'],
+            'creation_date' => date("Y-m-d"),
+            'delivery_address' => $faker->address,
+            'order_details' => [
+                [
+                    'quantity' => random_int(1, 100),
+                    'product_id' => $product6['product_id'],
+                ]
+            ],
         ]);
+
+
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'order_details.0.product_id' => ['The selected order_details.0.product_id is invalid.']
+                ]
+            ]);
     
     // order details has more than 5 lines
-    $response = $this->json('POST', '/api/orders', [
-        'customer_id' => $customer1['customer_id'],
-        'creation_date' => date("Y-m-d"),
-        'delivery_address' => $faker->address,
-        'order_details' => [
-            [
-                'quantity' => random_int(1, 100),
-                'product_id' => $product1['product_id'],
+        $response = $this->json('POST', '/api/orders', [
+            'customer_id' => $customer1['customer_id'],
+            'creation_date' => date("Y-m-d"),
+            'delivery_address' => $faker->address,
+            'order_details' => [
+                [
+                    'quantity' => random_int(1, 100),
+                    'product_id' => $product1['product_id'],
+                ],
+                [
+                    'quantity' => random_int(1, 100),
+                    'product_id' => $product2['product_id'],
+                ],
+                [
+                    'quantity' => random_int(1, 100),
+                    'product_id' => $product3['product_id'],
+                ],
+                [
+                    'quantity' => random_int(1, 100),
+                    'product_id' => $product4['product_id'],
+                ],
+                [
+                    'quantity' => random_int(1, 100),
+                    'product_id' => $product5['product_id'],
+                ],
+                [
+                    'quantity' => random_int(1, 100),
+                    'product_id' => $product7['product_id'],
+                ],
             ],
-            [
-                'quantity' => random_int(1, 100),
-                'product_id' => $product2['product_id'],
-            ],
-            [
-                'quantity' => random_int(1, 100),
-                'product_id' => $product3['product_id'],
-            ],
-            [
-                'quantity' => random_int(1, 100),
-                'product_id' => $product4['product_id'],
-            ],
-            [
-                'quantity' => random_int(1, 100),
-                'product_id' => $product5['product_id'],
-            ],
-            [
-                'quantity' => random_int(1, 100),
-                'product_id' => $product7['product_id'],
-            ],
-        ],
-    ]);
-
-    
-    $response->assertStatus(422)
-        ->assertExactJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'order_details' => ['The order details may not have more than 5 items.']
-            ]
         ]);
+
+
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'order_details' => ['The order details may not have more than 5 items.']
+                ]
+            ]);
     }
 
     /**
      * @test
-     */    
+     */
     public function can_create_an_order()
     {
         $faker = Factory::create();
 
-        $customer = $this->create('Customer');        
+        $customer = $this->create('Customer');
 
         $product1 = $this->create('Product');
         $product2 = $this->create('Product');
@@ -450,7 +450,7 @@ class ProductControllerTest extends TestCase
             'delivery_address' => $address,
             'order_details' => $order_details,
         ]);
-        
+
         $response->assertStatus(201);
 
         $this->assertDatabaseHas('order', [
@@ -501,6 +501,174 @@ class ProductControllerTest extends TestCase
             'quantity' => $quantity5
         ]);
 
+    }
 
+    /**
+     * @test
+     */
+    public function will_fail_with_validation_errors_when_requested_with_wrong_inputs()
+    {
+        $customer = $this->create('Customer');
+
+        $product = $this->create('Product');
+
+        $customer->products()->attach([
+            $product['product_id'],
+        ]);
+
+        $order_details = [
+            [
+                'quantity' => random_int(1, 200),
+                'product_id' => $product['product_id'],
+            ],
+        ];
+
+        $date = date("Y-m-d");
+        $faker = Factory::create();
+
+        $response = $this->json('POST', '/api/orders', [
+            'customer_id' => $customer['customer_id'],
+            'creation_date' => $date,
+            'delivery_address' => $faker->address,
+            'order_details' => $order_details,
+        ]);
+
+        $response->assertStatus(201);
+
+        // date_start is not a date
+        $response = $this->json('GET', '/api/orders', [
+            'date_start' => 'hello',
+        ]);
+
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'date_start' => ['The date start is not a valid date.']
+                ]
+            ]);
+
+        // both dates are not dates
+        $response = $this->json('GET', '/api/orders', [
+            'date_start' => 'hello',
+            'date_end' => 'hello',
+        ]);
+
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'date_end' => ['The date end is not a valid date.'],
+                    'date_start' => ['The date start is not a valid date.']
+                ]
+            ]);
+        
+        // only date_end is not valid
+        $response = $this->json('GET', '/api/orders', [
+            'date_end' => 'hello',
+        ]);
+
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'date_end' => ['The date end is not a valid date.'],
+                ]
+            ]);
+
+        // date_end is before date_start
+        $response = $this->json('GET', '/api/orders', [
+            'date_end' => '2019-01-01',
+            'date_start' => '2019-01-02',
+        ]);
+
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'date_end' => ['The date end must be a date after or equal to date start.']
+                ]
+            ]);
+        
+        // customer_id is invalid
+        $response = $this->json('GET', '/api/orders', [
+            'customer_id' => -1
+        ]);
+
+        $response->assertStatus(422)
+            ->assertExactJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'customer_id' => ['The selected customer id is invalid.']
+                ]
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function can_get_orders()
+    {
+        $customer = $this->create('Customer');
+
+        $product = $this->create('Product');
+
+        $customer->products()->attach([
+            $product['product_id'],
+        ]);
+
+        $quantity = random_int(1, 200);
+
+        $order_details = [
+            [
+                'quantity' => $quantity,
+                'product_id' => $product['product_id'],
+            ],
+        ];
+
+        $date = date("Y-m-d");
+        $faker = Factory::create();
+        $address = $faker->address;
+
+        $response = $this->json('POST', '/api/orders', [
+            'customer_id' => $customer['customer_id'],
+            'creation_date' => $date,
+            'delivery_address' => $address,
+            'order_details' => $order_details,
+        ]);
+
+        $response->assertStatus(201);
+        
+        // without parameters
+        $response = $this->json('GET', '/api/orders');
+
+        $response->assertStatus(200)
+            ->assertExactJson([
+                'orders' => [
+                    [
+                        'creation_date' => $date,
+                        'order_id' => 1,
+                        'customer_id' => $customer['customer_id'] . '',
+                        'delivery_address' => $address,
+                        'order_details' => [
+                            [
+                                'order_detail_id' => 1,
+                                'order_id' => '1',
+                                'price' => doubleval($product['price']) . '.0',
+                                'product' => [
+                                    'name' => $product['name'],
+                                    'price' => doubleval($product['price']) . '.0',
+                                    'product_description' => $product['product_description'],
+                                    'product_id' => $product['product_id'],
+                                ],
+                                'product_description' => $product['product_description'],
+                                'product_id' => '1',
+                                'quantity' => $quantity . ''
+                            ]
+                        ],
+                        'total' => doubleval($product['price'] * $quantity) . '.0'
+                    ]
+                ]
+            ]);
     }
 }
