@@ -49,6 +49,7 @@ class OrderStoreRequest extends FormRequest
             ],
             'order_details.*.product_id' => [
                 'required',
+                'distinct',
                 'exists:product,product_id',
                 'exists:customer_product,product_id,customer_id,'.$this->customer_id
             ]
