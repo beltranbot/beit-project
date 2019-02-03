@@ -31,13 +31,7 @@ class OrderController extends Controller
             $orders = $orders->where('creation_date', '<=', $date_end);
         }
 
-        // if ($request->has('date_start') && $request->has('date_end')) {
-        //     $date_start = $request->date_start;
-        //     $date_end = $request->date_end;
-        //     $orders = $orders->whereBetween('creation_date', [$date_start, $date_end]);
-        // }
-
-        $orders = $orders->get();
+        $orders = $orders->paginate(10);
 
         return response()->json([
             'orders' => $orders
